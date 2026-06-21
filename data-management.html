@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Database - PDAM IoT</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, viewport-fit=cover">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        
+:root {
+    --ios-bg: #f2f2f7;
+    --ios-card-bg: #ffffff;
+    --ios-blue: #007aff;
+    --ios-green: #34c759;
+    --ios-red: #ff3b30;
+    --ios-orange: #ff9500;
+    --ios-gray: #8e8e93;
+    --ios-light-gray: #e5e5ea;
+    --ios-label: #000000;
+    --ios-secondary-label: #8e8e93;
+    --ios-border: rgba(0, 0, 0, 0.1);
+    --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ios-bg: #1c1c1e;
+        --ios-card-bg: #2c2c2e;
+        --ios-label: #ffffff;
+        --ios-secondary-label: #aeaeb2;
+        --ios-light-gray: #3a3a3c;
+        --ios-border: rgba(255, 255, 255, 0.15);
+    }
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    font-family: var(--font-family);
+    color: var(--ios-label);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* iOS Phone Container Mockup */
+.phone-container {
+    width: 100%;
+    max-width: 430px;
+    height: 100vh;
+    max-height: 932px;
+    background-color: var(--ios-bg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-radius: 44px;
+    border: 12px solid #2d2d30;
+}
+
+/* iOS Top Status Bar */
+.ios-status-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 47px;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1010;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ios-label);
+}
+
+.dynamic-island {
+    width: 110px;
+    height: 30px;
+    background-color: #000000;
+    border-radius: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+    z-index: 1011;
+}
+
+.ios-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+}
+
+.battery-icon {
+    width: 22px;
+    height: 11px;
+    border: 1px solid var(--ios-label);
+    border-radius: 3px;
+    padding: 1px;
+    position: relative;
+    display: flex;
+}
+
+.battery-icon::after {
+    content: '';
+    width: 1.5px;
+    height: 4px;
+    background-color: var(--ios-label);
+    position: absolute;
+    right: -3.5px;
+    top: 2.5px;
+    border-radius: 0 1px 1px 0;
+}
+
+.battery-level {
+    width: 80%;
+    height: 100%;
+    background-color: var(--ios-label);
+    border-radius: 1px;
+}
+
+/* Glassmorphism Header */
+.ios-nav-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 94px;
+    padding: 47px 16px 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(242, 242, 247, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    border-bottom: 0.5px solid var(--ios-border);
+}
+
+@media (prefers-color-scheme: dark) {
+    .ios-nav-header {
+        background: rgba(28, 28, 30, 0.8);
+    }
+}
+
+.nav-btn {
+    color: var(--ios-blue);
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+}
+
+.nav-btn i {
+    font-size: 20px;
+}
+
+.nav-title-inline {
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ios-label);
+}
+
+/* Scrollable main view */
+.ios-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-top: 106px;
+    padding-bottom: 92px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ios-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Large App Title styling */
+.ios-large-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin: 8px 0 20px 0;
+    color: var(--ios-label);
+}
+
+/* iOS Card widgets */
+.ios-card {
+    background-color: var(--ios-card-bg);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 0.5px solid var(--ios-border);
+}
+
+.ios-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ios-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ios-secondary-label);
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.ios-card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+/* Color codes */
+.bg-ios-blue { background-color: rgba(0, 122, 255, 0.15); color: var(--ios-blue); }
+.bg-ios-green { background-color: rgba(52, 199, 89, 0.15); color: var(--ios-green); }
+.bg-ios-red { background-color: rgba(255, 59, 48, 0.15); color: var(--ios-red); }
+.bg-ios-orange { background-color: rgba(255, 149, 0, 0.15); color: var(--ios-orange); }
+
+/* iOS Lists (Grouped) */
+.ios-list {
+    background-color: var(--ios-card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    padding: 0;
+    list-style: none;
+    border: 0.5px solid var(--ios-border);
+}
+
+.ios-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--ios-border);
+    color: var(--ios-label);
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.ios-list-item:last-child {
+    border-bottom: none;
+}
+
+.ios-list-item:active {
+    background-color: var(--ios-light-gray);
+}
+
+.ios-list-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ios-list-label i {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+}
+
+.ios-list-value {
+    color: var(--ios-secondary-label);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chevron-right {
+    color: var(--ios-border);
+    font-size: 14px;
+}
+
+/* iOS Toggle Switch */
+.ios-switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 31px;
+    margin: 0;
+}
+
+.ios-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ios-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--ios-light-gray);
+    transition: .25s;
+    border-radius: 34px;
+}
+
+.ios-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .25s;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ios-switch input:checked + .ios-switch-slider {
+    background-color: var(--ios-green);
+}
+
+.ios-switch input:checked + .ios-switch-slider:before {
+    transform: translateX(20px);
+}
+
+.ios-switch input:disabled + .ios-switch-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* iOS Buttons */
+.ios-btn-primary {
+    background-color: var(--ios-blue);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.ios-btn-primary:active {
+    background-color: #0056b3;
+}
+
+.ios-btn-danger {
+    background-color: var(--ios-red);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.ios-btn-danger:active {
+    background-color: #c70000;
+}
+
+/* iOS bottom sheet and timeline */
+.ios-bottom-sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -100%;
+    height: 65%;
+    background-color: var(--ios-card-bg);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+    z-index: 1050;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.ios-bottom-sheet.show {
+    transform: translateY(-100%);
+}
+
+.sheet-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sheet-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sheet-handle {
+    width: 36px;
+    height: 5px;
+    background-color: var(--ios-light-gray);
+    border-radius: 10px;
+    margin: 12px auto;
+    cursor: pointer;
+}
+
+.sheet-header {
+    padding: 0 20px 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid var(--ios-border);
+}
+
+.sheet-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sheet-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    color: var(--ios-blue);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+/* Glassmorphism Tab Bar */
+.ios-tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 83px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(248, 248, 250, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    border-top: 0.5px solid var(--ios-border);
+}
+
+@media (prefers-color-scheme: dark) {
+    .ios-tab-bar {
+        background: rgba(28, 28, 30, 0.9);
+    }
+}
+
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--ios-gray);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 500;
+    gap: 4px;
+    flex: 1;
+    padding-top: 6px;
+}
+
+.tab-item i {
+    font-size: 22px;
+}
+
+.tab-item.active {
+    color: var(--ios-blue);
+}
+
+.ios-home-indicator {
+    position: absolute;
+    bottom: 8px;
+    width: 140px;
+    height: 5px;
+    background-color: var(--ios-label);
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    pointer-events: none;
+}
+
+.ios-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--ios-red);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 1px 5px;
+    min-width: 16px;
+    text-align: center;
+}
+
+/* Forms input fields styling */
+.ios-form-group {
+    margin-bottom: 16px;
+}
+
+.ios-form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--ios-secondary-label);
+    margin-bottom: 6px;
+    padding-left: 4px;
+}
+
+.ios-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.ios-input-wrap i {
+    position: absolute;
+    left: 12px;
+    color: var(--ios-secondary-label);
+    font-size: 16px;
+}
+
+.ios-input-wrap input {
+    width: 100%;
+    padding: 12px 12px 12px 38px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--ios-light-gray);
+    color: var(--ios-label);
+    font-size: 17px;
+    font-family: var(--font-family);
+    outline: none;
+}
+
+.ios-input-wrap input:focus {
+    box-shadow: inset 0 0 0 1px var(--ios-blue);
+}
+
+.metric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.text-critical {
+    color: var(--ios-red) !important;
+}
+
+/* Pulsing cards for threshold alerts */
+.card-warning-pulse {
+    animation: warning-pulse 2s infinite;
+    border: 1px solid var(--ios-red) !important;
+}
+
+@keyframes warning-pulse {
+    0% { background-color: var(--ios-card-bg); }
+    50% { background-color: rgba(255, 59, 48, 0.05); }
+    100% { background-color: var(--ios-card-bg); }
+}
+
+/* Responsive layout on mobile screens */
+@media (max-width: 480px) {
+    body {
+        background-color: var(--ios-bg);
+    }
+    .phone-container {
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100%;
+        border-radius: 0;
+        border: none;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    <!-- Dynamic Island / Hardware notch mockup -->
+    <div class="dynamic-island"></div>
+    
+    <!-- Status Bar Mockup -->
+    <div class="ios-status-bar">
+        <div id="status-bar-time">09:41</div>
+        <div class="ios-icons">
+            <i class="fa-solid fa-signal"></i>
+            <i class="fa-solid fa-wifi"></i>
+            <div class="battery-icon">
+                <div class="battery-level"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Glassmorphism Header -->
+    <div class="ios-nav-header">
+        <div class="nav-left">
+            <a href="#" class="nav-btn" id="nav-back-btn" style="display:none;" onclick="goBack(); return false;">
+                <i class="fa-solid fa-chevron-left"></i> <span>Back</span>
+            </a>
+            <a href="profile.html" class="nav-btn" id="nav-profile-btn">
+                <i class="fa-solid fa-circle-user"></i>
+            </a>
+        </div>
+        <div class="nav-center">
+            <span class="nav-title-inline">Database</span>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-btn" id="timeline-trigger" onclick="toggleTimelineSheet(); return false;">
+                <i class="fa-solid fa-wifi"></i>
+            </a>
+            <a href="#" class="nav-btn" id="alerts-trigger" onclick="toggleAlertsSheet(); return false;">
+                <i class="fa-solid fa-bell"></i>
+                <span class="ios-badge" id="notification-badge" style="display:none;">0</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main scrollable content body -->
+    <div class="ios-content">
+
+        <!-- Back button override -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById('nav-back-btn').style.display = 'flex';
+                document.getElementById('nav-profile-btn').style.display = 'none';
+            });
+        </script>
+        
+        <div class="ios-large-title">Maintenance</div>
+
+        <!-- MOCK DATABASE LOG COUNT CARD -->
+        <div class="ios-card">
+            <h3 class="ios-card-title">Storage Status</h3>
+            <div style="font-size:32px; font-weight:700; margin:10px 0;"><span id="total-records-display">124,300</span></div>
+            <div style="font-size:14px; color:var(--ios-secondary-label); margin-bottom:12px;">Total sensor records saved locally</div>
+            
+            <div style="display:flex; justify-content:space-between; font-size:14px; padding:10px 0; border-top:0.5px solid var(--ios-border);">
+                <span>Auto-Purge (Max 30d)</span>
+                <span style="font-weight:600; color:var(--ios-green);">ENABLED</span>
+            </div>
+        </div>
+
+        <!-- ACTIONS IOS LIST -->
+        <div class="ios-card" style="padding:0;">
+            <div class="ios-card-title" style="padding:16px 16px 8px 16px;">Utility Commands</div>
+            <ul class="ios-list" style="margin:0; border:none; border-radius:0;">
+                <li class="ios-list-item">
+                    <a href="#" onclick="triggerExport('xlsx'); return false;" style="display:flex; justify-content:space-between; align-items:center; width:100%; text-decoration:none; color:var(--ios-label);">
+                        <div class="ios-list-label">
+                            <i class="fa-solid fa-file-excel" style="background-color:var(--ios-green);"></i>
+                            <span>Export Spreadsheet (.xlsx)</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right chevron-right"></i>
+                    </a>
+                </li>
+                <li class="ios-list-item">
+                    <a href="#" onclick="triggerExport('csv'); return false;" style="display:flex; justify-content:space-between; align-items:center; width:100%; text-decoration:none; color:var(--ios-label);">
+                        <div class="ios-list-label">
+                            <i class="fa-solid fa-file-csv" style="background-color:var(--ios-blue);"></i>
+                            <span>Export CSV Raw File</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right chevron-right"></i>
+                    </a>
+                </li>
+                <li class="ios-list-item" style="border-bottom:none;">
+                    <a href="#" onclick="openPurgeModal(); return false;" style="display:flex; justify-content:space-between; align-items:center; width:100%; text-decoration:none; color:var(--ios-label);">
+                        <div class="ios-list-label">
+                            <i class="fa-solid fa-trash-can" style="background-color:var(--ios-red);"></i>
+                            <span class="text-danger">Purge Older Database Logs</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- RECENT PURGES LOG -->
+        <div class="ios-card">
+            <h3 class="ios-card-title" style="margin-bottom:12px;">Activity Log</h3>
+            <ul style="padding:0; margin:0; list-style:none;" id="purge-activity-list">
+                <!-- Loaded dynamically from stats -->
+            </ul>
+        </div>
+
+        <!-- IOS CONFIRMATION BOTTOM SHEET (REPLACES MODAL) -->
+        <div class="ios-bottom-sheet" id="purge-confirm-sheet" style="height:50%;">
+            <div class="sheet-handle" onclick="closePurgeModal()"></div>
+            <div class="sheet-header">
+                <h3 class="text-danger">Confirm Log Purge</h3>
+                <a href="#" class="action-btn" onclick="closePurgeModal(); return false;">Cancel</a>
+            </div>
+            <div class="sheet-content" style="padding:20px;">
+                <p style="margin:0 0 16px 0; font-size:15px; color:var(--ios-secondary-label); text-align:center;">
+                    This will delete all historical records before current month. Type <strong style="color:var(--ios-label);">CONFIRM</strong> to verify.
+                </p>
+                <div class="ios-form-group">
+                    <div class="ios-input-wrap" style="display:block;">
+                        <input type="text" id="purgeConfirmInput" placeholder="Type CONFIRM here" style="padding-left:14px; text-align:center; font-weight:bold; letter-spacing:1px;">
+                    </div>
+                </div>
+                <button class="ios-btn-danger" id="purgeConfirmBtn" onclick="executePurge()" style="margin-top:16px;">Purge Database</button>
+            </div>
+        </div>
+            </div> <!-- End Content -->
+
+    <!-- Tab Bar Bottom -->
+    <div class="ios-tab-bar">
+        <a href="dashboard.html" class="tab-item" id="tab-dashboard" class="tab-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="water-level.html" class="tab-item" id="tab-water">
+            <i class="fa-solid fa-droplet"></i>
+            <span>Water</span>
+        </a>
+        <a href="pump-energy.html" class="tab-item" id="tab-pump">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Pump</span>
+        </a>
+        <a href="flow-pressure.html" class="tab-item" id="tab-flow">
+            <i class="fa-solid fa-faucet-drip"></i>
+            <span>Flow</span>
+        </a>
+        <a href="water-quality.html" class="tab-item" id="tab-quality">
+            <i class="fa-solid fa-flask"></i>
+            <span>Quality</span>
+        </a>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="ios-home-indicator"></div>
+
+    <!-- Bottom Sheets -->
+    <div class="sheet-backdrop" id="sheet-backdrop" onclick="closeAllSheets()"></div>
+
+    <!-- Notifications Alerts Sheet -->
+    <div class="ios-bottom-sheet" id="notification-sheet">
+        <div class="sheet-handle" onclick="toggleAlertsSheet()"></div>
+        <div class="sheet-header">
+            <h3>Notifications</h3>
+            <div class="sheet-actions">
+                <a href="#" class="action-btn text-danger" onclick="clearAllNotifications(); return false;">Clear</a>
+                <a href="#" class="action-btn" onclick="markAllNotificationsAsRead(); return false;">Mark Read</a>
+            </div>
+        </div>
+        <div class="sheet-content">
+            <ul id="notification-list" style="list-style:none; padding:0; margin:0;">
+                <!-- Filled dynamically -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Connection Log Timeline Sheet -->
+    <div class="ios-bottom-sheet" id="timeline-sheet">
+        <div class="sheet-handle" onclick="toggleTimelineSheet()"></div>
+        <div class="sheet-header">
+            <h3>System Connections</h3>
+            <div class="sheet-actions">
+                <a href="#" class="action-btn" onclick="fetchTimeline(); return false;"><i class="fa-solid fa-arrows-rotate"></i></a>
+            </div>
+        </div>
+        <div class="sheet-content">
+            <ul id="timeline-list" style="list-style:none; padding:0; margin:0;">
+                <!-- Filled dynamically -->
+            </ul>
+        </div>
+    </div>
+
+</div> <!-- End Phone Container -->
+
+<!-- ApexCharts scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+    // System Bar Time Update
+    function updateClock() {
+        const now = new Date();
+        const hrs = now.getHours().toString().padStart(2, '0');
+        const mins = now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('status-bar-time').innerText = hrs + ':' + mins;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Authentication Guard
+    function checkAuth() {
+        const userStr = localStorage.getItem('currentUser');
+        if (!userStr) {
+            window.location.href = 'login.html';
+            return null;
+        }
+        const user = JSON.parse(userStr);
+
+        // Hide administrative tab elements if normal user
+        if (user.email !== 'admin@iotmonitor.com') {
+            const adminElements = document.querySelectorAll('.admin-only-item, .admin-only-card');
+            adminElements.forEach(el => el.style.display = 'none');
+        }
+        return user;
+    }
+
+    // Sheet toggle logics
+    function toggleAlertsSheet() {
+        closeTimelineSheet();
+        const sheet = document.getElementById('notification-sheet');
+        const backdrop = document.getElementById('sheet-backdrop');
+        sheet.classList.toggle('show');
+        backdrop.classList.toggle('show', sheet.classList.contains('show'));
+    }
+
+    function toggleTimelineSheet() {
+        closeAlertsSheet();
+        const sheet = document.getElementById('timeline-sheet');
+        const backdrop = document.getElementById('sheet-backdrop');
+        sheet.classList.toggle('show');
+        backdrop.classList.toggle('show', sheet.classList.contains('show'));
+        if (sheet.classList.contains('show')) {
+            fetchTimeline();
+        }
+    }
+
+    function closeAlertsSheet() {
+        document.getElementById('notification-sheet').classList.remove('show');
+    }
+
+    function closeTimelineSheet() {
+        document.getElementById('timeline-sheet').classList.remove('show');
+    }
+
+    function closeAllSheets() {
+        closeAlertsSheet();
+        closeTimelineSheet();
+        document.getElementById('sheet-backdrop').classList.remove('show');
+        if (typeof closePurgeModal === 'function') {
+            closePurgeModal();
+        }
+    }
+
+    // Shared LocalStorage Initial Mock Data
+    if (!localStorage.getItem('alert_list')) {
+        const defaultAlerts = [
+            { id: 1, device_code: 'ESP32_PUMP_01', message: 'Voltage fluctuation in Phase S (254V)', type: 'warning', created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(), is_read: false },
+            { id: 2, device_code: 'ESP8266_01', message: 'Water level near critical high limit (92%)', type: 'critical', created_at: new Date(Date.now() - 1000 * 60 * 35).toISOString(), is_read: false }
+        ];
+        localStorage.setItem('alert_list', JSON.stringify(defaultAlerts));
+    }
+
+    if (!localStorage.getItem('users_list')) {
+        const defaultUsers = [
+            { id: 1, name: 'Admin Tirta', email: 'admin@iotmonitor.com', is_approved: true, created_at: '2026-05-01T08:00:00.000Z' },
+            { id: 2, name: 'Asri Wandari', email: 'asri@iotmonitor.com', is_approved: true, created_at: '2026-06-10T09:30:00.000Z' },
+            { id: 3, name: 'Budi Hartono', email: 'budi@iotmonitor.com', is_approved: false, created_at: '2026-06-20T14:15:00.000Z' }
+        ];
+        localStorage.setItem('users_list', JSON.stringify(defaultUsers));
+    }
+
+    if (!localStorage.getItem('archive_stats')) {
+        const defaultStats = [
+            { month: 6, year: 2026, name: 'June', total: 61400, counts: { pump: 15400, quality: 18200, water_level: 14500, flow: 6650, pressure: 6650 } },
+            { month: 5, year: 2026, name: 'May', total: 128500, counts: { pump: 32000, quality: 38500, water_level: 30000, flow: 14000, pressure: 14000 } }
+        ];
+        localStorage.setItem('archive_stats', JSON.stringify(defaultStats));
+    }
+
+    // Alerts Bell Rendering
+    function updateHeaderAlertsUI() {
+        const alerts = JSON.parse(localStorage.getItem('alert_list') || '[]');
+        const unreadCount = alerts.filter(a => !a.is_read).length;
+        const badge = document.getElementById('notification-badge');
+        const list = document.getElementById('notification-list');
+
+        if (unreadCount > 0) {
+            badge.innerText = unreadCount;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+
+        if (alerts.length > 0) {
+            list.innerHTML = '';
+            alerts.forEach(notif => {
+                let iconClass = 'fa-circle-info text-primary';
+                let iconColorBg = 'rgba(0, 122, 255, 0.15)';
+                if (notif.type === 'warning') {
+                    iconClass = 'fa-triangle-exclamation text-warning';
+                    iconColorBg = 'rgba(255, 149, 0, 0.15)';
+                } else if (notif.type === 'critical') {
+                    iconClass = 'fa-circle-exclamation text-danger';
+                    iconColorBg = 'rgba(255, 59, 48, 0.15)';
+                }
+
+                let itemOpacity = notif.is_read ? 'opacity:0.6;' : 'font-weight:600;';
+                let dateObj = new Date(notif.created_at);
+                let timeStr = dateObj.getHours().toString().padStart(2, '0') + ':' + dateObj.getMinutes().toString().padStart(2, '0');
+
+                list.innerHTML += `
+                    <li style="display:flex; padding:12px 0; border-bottom:0.5px solid var(--ios-border); align-items:center; justify-content:space-between; ${itemOpacity}">
+                        <div style="display:flex; align-items:center; gap:12px; flex:1; min-width:0;">
+                            <div style="width:34px; height:34px; border-radius:8px; background-color:${iconColorBg}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <i class="fa-solid ${iconClass}"></i>
+                            </div>
+                            <div style="min-width:0;">
+                                <div style="font-size:15px; color:var(--ios-label); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${notif.device_code}</div>
+                                <div style="font-size:13px; color:var(--ios-secondary-label); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${notif.message}</div>
+                            </div>
+                        </div>
+                        <div style="font-size:12px; color:var(--ios-secondary-label); margin-left:8px;">${timeStr}</div>
+                    </li>
+                `;
+            });
+        } else {
+            list.innerHTML = `
+                <li style="text-align:center; padding:40px 0; color:var(--ios-secondary-label);">
+                    <i class="fa-solid fa-circle-check text-success" style="font-size:32px; margin-bottom:8px; display:block;"></i>
+                    All systems online. No new alerts.
+                </li>
+            `;
+        }
+    }
+
+    function markAllNotificationsAsRead() {
+        const alerts = JSON.parse(localStorage.getItem('alert_list') || '[]');
+        alerts.forEach(a => a.is_read = true);
+        localStorage.setItem('alert_list', JSON.stringify(alerts));
+        updateHeaderAlertsUI();
+    }
+
+    function clearAllNotifications() {
+        localStorage.setItem('alert_list', JSON.stringify([]));
+        updateHeaderAlertsUI();
+    }
+
+    // Timeline Log Spinner
+    function fetchTimeline() {
+        const list = document.getElementById('timeline-list');
+        list.innerHTML = `
+            <li style="text-align:center; padding:30px 0;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:24px; color:var(--ios-blue);"></i>
+            </li>
+        `;
+        setTimeout(() => {
+            const devices = [
+                { name: "AMDK Tiber (Water Quality)", status: "Connected", time: "1m ago", icon: "fa-flask", color: "var(--ios-blue)" },
+                { name: "ESP32 Pump Sensor (Sumber Nongko)", status: "Connected", time: "2m ago", icon: "fa-bolt", color: "var(--ios-orange)" },
+                { name: "ESP8266 Water Level (IPA Plandi)", status: "Connected", time: "3m ago", icon: "fa-droplet", color: "var(--ios-blue)" },
+                { name: "Flowmeter Sensor (IPA Kudu)", status: "Connected", time: "4m ago", icon: "fa-faucet-drip", color: "var(--ios-green)" }
+            ];
+            list.innerHTML = '';
+            devices.forEach(d => {
+                list.innerHTML += `
+                    <li style="display:flex; padding:12px 0; border-bottom:0.5px solid var(--ios-border); align-items:center; justify-content:space-between;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <div style="width:34px; height:34px; border-radius:8px; background-color:var(--ios-light-gray); display:flex; align-items:center; justify-content:center; color:${d.color};">
+                                <i class="fa-solid ${d.icon}"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:15px; font-weight:600; color:var(--ios-label);">${d.name}</div>
+                                <div style="font-size:13px; color:var(--ios-green); font-weight:500;">${d.status}</div>
+                            </div>
+                        </div>
+                        <div style="font-size:12px; color:var(--ios-secondary-label);">${d.time}</div>
+                    </li>
+                `;
+            });
+        }, 600);
+    }
+
+    function goBack() {
+        window.history.back();
+    }
+
+    // Set active class on active tab bar item
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentUser = checkAuth();
+        updateHeaderAlertsUI();
+    });
+</script>
+<script>
+
+        function openPurgeModal() {
+            document.getElementById('purge-confirm-sheet').classList.add('show');
+            document.getElementById('sheet-backdrop').classList.add('show');
+        }
+
+        function closePurgeModal() {
+            document.getElementById('purge-confirm-sheet').classList.remove('show');
+            document.getElementById('sheet-backdrop').classList.remove('show');
+            document.getElementById('purgeConfirmInput').value = '';
+        }
+
+        function triggerExport(format) {
+            alert('Exporting data as ' + format.toUpperCase() + '... File download will begin in simulated background.');
+        }
+
+        function updateStorageDisplay() {
+            const stats = JSON.parse(localStorage.getItem('archive_stats') || '[]');
+            const total = stats.reduce((acc, s) => acc + s.total, 0);
+            $('#total-records-display').text(total.toLocaleString('en-US'));
+
+            const list = $('#purge-activity-list');
+            list.innerHTML = '';
+            let html = '';
+            stats.forEach(s => {
+                html += `
+                    <li style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:0.5px solid var(--ios-border); font-size:15px;">
+                        <div>
+                            <div style="font-weight:600; color:var(--ios-label);">${s.name} ${s.year}</div>
+                            <div style="font-size:12px; color:var(--ios-secondary-label);">Pump: ${s.counts.pump.toLocaleString()} | Quality: ${s.counts.quality.toLocaleString()}</div>
+                        </div>
+                        <div style="font-weight:700; color:var(--ios-secondary-label);">${s.total.toLocaleString()} recs</div>
+                    </li>
+                `;
+            });
+            list.html(html);
+        }
+
+        function executePurge() {
+            const val = $('#purgeConfirmInput').val().trim();
+            if (val === 'CONFIRM') {
+                const currentMonthStats = [
+                    { month: 6, year: 2026, name: 'June', total: 61400, counts: { pump: 15400, quality: 18200, water_level: 14500, flow: 6650, pressure: 6650 } }
+                ];
+                localStorage.setItem('archive_stats', JSON.stringify(currentMonthStats));
+                updateStorageDisplay();
+                alert('Database logs purged successfully! Saved local storage has been reduced.');
+                closePurgeModal();
+            } else {
+                alert('Verification string mismatched! Deletion aborted.');
+            }
+        }
+
+        $(document).ready(function() {
+            updateStorageDisplay();
+        });
+        
+</script>
+</body>
+</html>
